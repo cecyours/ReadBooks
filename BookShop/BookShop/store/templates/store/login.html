@@ -13,13 +13,6 @@
 	<div class="row justify-content-md-center">
 		<div class="col-md-4 col-sm-3">
 			<div class="signin-form">
-				{% if messages %}
-				<div class="messages">
-				    {% for message in messages %}
-				    <p>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-				    {% endfor %}
-				</div>
-				{% endif %}
 				<h3> Sign In</h3>	
 				<form action="" method="POST" class="auth-validate-form">
 					{% csrf_token %}
@@ -31,6 +24,13 @@
 					   <label>Password</label>
 					   <input type="password" name="pass" class="form-control">
 					</div>
+					{% if messages %}
+				<div class="messages">
+				    {% for message in messages %}
+				    <p style="background-color:red">{% if message.tags %} {% endif %}{{ message }}</p>
+				    {% endfor %}
+				</div>
+				{% endif %}
 					<button type="submit" class="btn btn-warning">Login</button>
 				</form>
 				<a href="#">Forgot your password?</a>

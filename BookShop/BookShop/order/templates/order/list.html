@@ -5,7 +5,7 @@
 			    <table class="table table-hover">
 			        <thead class="text-center">
 			            <tr>
-			                <th scope="col">#</th>
+			                <th scope="col">Sr.No</th>
 			                <th scope="col">Order ID</th>
 			                <th scope="col">Payment</th>
 			                <th scope="col">Qty</th>
@@ -18,7 +18,7 @@
 			            <tr>
 			                <td>{{ forloop.counter }}</td>
 			                <td><a href="{% url 'order:order_details' id=morder.id %}">#2018{{ morder.id }}</a></td>
-			                <td>{{ morder.payable }} $.</td>
+			                <td>{{ morder.payable }} $</td>
 			                <td>{{ morder.totalbook }}</td>
 			                <td class="text-center">
 			                	{% if morder.paid == True %}

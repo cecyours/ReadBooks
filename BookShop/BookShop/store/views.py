@@ -11,7 +11,7 @@ def index(request):
     newpublished = Book.objects.order_by('-created')[:15]
     slide = Slider.objects.order_by('-created')[:3]
     context = {
-        "newbooks":newpublished,
+        "newbooks": newpublished,
         "slide": slide
     }
     return render(request, 'store/index.html', context)
@@ -29,23 +29,24 @@ def signin(request):
                 login(request, auth)
                 return redirect('store:index')
             else:
-            	messages.error(request, 'username and password doesn\'t match')
+                messages.error(request, 'username and password doesn\'t match')
 
-    return render(request, "store/login.html")	
+    return render(request, "store/login.html")
 
 
 def signout(request):
     logout(request)
-    return redirect('store:index')	
+    return redirect('store:index')
 
 
 def registration(request):
-	form = RegistrationForm(request.POST or None)
-	if form.is_valid():
-		form.save()
-		return redirect('store:signin')
+    form = RegistrationForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('store:signin')
 
-	return render(request, 'store/signup.html', {"form": form})
+    return render(request, 'store/signup.html', {"form": form})
+
 
 def payment(request):
     return render(request, 'store/payment.html')
@@ -66,11 +67,11 @@ def get_book(request, id):
             if form.is_valid():
                 temp = form.save(commit=False)
                 temp.customer = User.objects.get(id=request.user.id)
-                temp.book = book          
+                temp.book = book
                 temp = Book.objects.get(id=id)
                 temp.totalreview += 1
                 temp.totalrating += int(request.POST.get('review_star'))
-                form.save()  
+                form.save()
                 temp.save()
 
                 messages.success(request, "Review Added Successfully")
@@ -78,7 +79,7 @@ def get_book(request, id):
         else:
             messages.error(request, "You need login first.")
     context = {
-        "book":book,
+        "book": book,
         "rbooks": rbooks,
         "form": form,
         "rreview": rreview
@@ -91,14 +92,16 @@ def get_books(request):
     paginator = Paginator(books_, 10)
     page = request.GET.get('page')
     books = paginator.get_page(page)
-    return render(request, "store/category.html", {"book":books})
+    return render(request, "store/category.html", {"book": books})
+
 
 def get_book_category(request, id):
     book_ = Book.objects.filter(category_id=id)
     paginator = Paginator(book_, 10)
     page = request.GET.get('page')
     book = paginator.get_page(page)
-    return render(request, "store/category.html", {"book":book})
+    return render(request, "store/category.html", {"book": book})
+
 
 def get_writer(request, id):
     wrt = get_object_or_404(Writer, id=id)
@@ -108,4 +111,3 @@ def get_writer(request, id):
         "book": book
     }
     return render(request, "store/writer.html", context)
-
