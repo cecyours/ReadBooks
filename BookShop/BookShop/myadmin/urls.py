@@ -30,4 +30,12 @@ urlpatterns = [
     path('update-order/<int:pk>', views.update_order_view, name='update-order'),
     path('update-writer/<int:pk>', views.update_writer, name='update-writer'),
 
+    path('add_category',views.add_category,name='add_category'),
+    path('delete_category/<int:pk>', views.delete_category, name='delete_category'),
+    path('view_all_cat',views.view_all_cat,name='view_all_cat'),
+
+    path('view-deliveryman',views.view_deliveryman,name='view-deliveryman'),
+    path('add-deliveryman/<int:pk>', views.add_deliveryman, name='add-deliveryman'),
+    path('remove-deliveryman/<int:pk>', views.remove_deliveryman, name='remove-deliveryman'),
+
 ]

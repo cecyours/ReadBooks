@@ -1,5 +1,7 @@
 {% extends 'store/base.html' %}
 {% load customfunction %}
+{% load humanize %}
+
 {% block container %}
 			<div class="row">
 				{% for item in book %}
@@ -14,7 +16,7 @@
 							{{ item.totalrating|averagerating:item.totalreview }}
 							<span class="totalrating">{{ item.totalreview|add:-1 }}</span>
 						</div>
-						<p> {{ item.price }} $. </p>
+						<p>₹{{ item.price|intcomma }} </p>
 						<button class="btn btn-warning" id="addTocart" data-book-id="{{ item.id }}">
 								<i class="fa fa-shopping-cart""></i>Add to cart
 						</button>

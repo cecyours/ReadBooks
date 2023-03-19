@@ -19,6 +19,7 @@ def order_create(request):
 				order = form.save(commit=False)
 				order.customer = User.objects.get(id=request.user.id)
 				order.payable = cart.get_total_price()
+				order.status = "pending"
 				order.totalbook = len(cart) # len(cart.cart) // number of individual book
 				order.save()
 

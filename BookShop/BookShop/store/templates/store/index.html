@@ -1,4 +1,5 @@
 {% extends 'store/base.html' %}
+{% load humanize %}
 
 {% load static %}
 {% load customfunction %}
@@ -49,7 +50,7 @@
 						{% for item in newbooks %}
 						<div class="book-wrapper text-center">
 							<div class="coverpage">
-								<img src="{{ item.coverpage.url }}"/>
+								<img src="{{ item.coverpage.url }}" height="200px;"/>
 							</div>
 							<a href="{% url 'store:book' id=item.id %}">{{ item.name|text_short }}</a>
 							<a href="{% url 'store:writer' id=item.writer.id %}">{{ item.writer }}</a>
@@ -57,7 +58,7 @@
 								{{ item.totalrating|averagerating:item.totalreview }}
 								<span class="totalrating">{{ item.totalreview|add:-1 }}</span>
 							</div>
-							<p> {{ item.price }} $.</p>
+							<p> ₹{{ item.price|intcomma }}</p>
 							<button class="btn btn-warning" id="addTocart" data-book-id="{{ item.id }}">
 									<i class="fa fa-shopping-cart'' "></i>Add to cart
 								</button>
@@ -73,8 +74,8 @@
 					<div class="regulara sliderzx">
 						{% for p in newbooks %}
 						<div class="book-wrapper text-center">
-							<div class="coverpage">
-								<img src="{{ p.coverpage.url }}"/>
+							<div class="coverpage" >
+								<img src="{{ p.coverpage.url }}" height="200px;"/>
 							</div>
 							<a href="{% url 'store:book' id=p.id %}">{{ p.name|text_short }}</a>
 							<a href="{% url 'store:writer'  id=p.writer.id %}">{{ p.writer }}</a>
@@ -82,7 +83,7 @@
 								{{ p.totalrating|averagerating:p.totalreview }}
 								<span class="totalrating">{{ p.totalreview|add:-1 }}</span>
 							</div>
-							<p> ${{ p.price }} $.</p>
+							<p> ₹{{ p.price|intcomma }}</p>
 							<button class="btn btn-warning" id="addTocart" data-book-id="{{ p.id }}">
 									<i class="fa fa-shopping-cart''" ></i>Add to cart
 								</button>

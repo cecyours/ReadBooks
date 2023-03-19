@@ -2,7 +2,13 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Review
+from .models import Review,Category
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ["name","slug","icon"]
 
 class RegistrationForm(UserCreationForm):
     name = forms.CharField(required=True)

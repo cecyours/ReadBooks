@@ -1,6 +1,8 @@
 {% extends 'store/base.html' %}
 {% load static %}
+{% load humanize %}
 {% block container %}
+
 			<div class="cart_info">
 			    <table class="table table-hover">
 			        <thead class="text-center">
@@ -17,14 +19,14 @@
 			            {% for morder in myorder %}
 			            <tr>
 			                <td>{{ forloop.counter }}</td>
-			                <td><a href="{% url 'order:order_details' id=morder.id %}">#2018{{ morder.id }}</a></td>
-			                <td>{{ morder.payable }} $</td>
+			                <td><a href="{% url 'order:order_details' id=morder.id %}">#2023{{ morder.id }}</a></td>
+			                <td>₹{{ morder.payable|intcomma }} </td>
 			                <td>{{ morder.totalbook }}</td>
 			                <td class="text-center">
 			                	{% if morder.paid == True %}
 			                	<p class="status3">Confirmed</p>
 			                	{% else %}
-			                	<p class="status1">Processing</p>
+			                	<p class="status1">{{morder.status}}</p>
 			                	{% endif %}
 			                </td>
 			                <td>{{ morder.created }}</td>

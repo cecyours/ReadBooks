@@ -2,6 +2,8 @@ import unicodedata
 
 from django.shortcuts import render, redirect, reverse
 
+from store.models import Category
+
 from . import forms, models
 from store.models import Book,Writer
 from django.contrib.auth.models import User
@@ -16,7 +18,7 @@ from django.contrib import messages
 from django.conf import settings
 
 
-
+from deliveryapp.models import DeliveryMan
 
 def adminclick_view(request):
     if request.user.is_authenticated:
@@ -46,21 +48,59 @@ def admin_dashboard_view(request):
     # for recent order tables
     orders = ordermodel.Order.objects.all()
     ordered_products = []
+    del_list = []
     ordered_bys = []
     for order in orders:
-        ordered_product = Book.objects.all().filter(id=order.customer.id)
-        ordered_by = User.objects.all().filter(id=order.customer.id)
-        ordered_products.append(ordered_product)
-        ordered_bys.append(ordered_by)
 
+        # print(order.id,":  ---- ",order.delivery)
+        order_item = ordermodel.OrderItem.objects.all().filter(order_id=order.id)
+        for i in order_item:
+            ordered_products.append(Book.objects.all().filter(id=i.book_id) )
+        # ordered_product = Book.objects.all().filter(id=order_item.book_id)    
+        # 
+        ordered_by = User.objects.all().filter(id=order.customer.id)
+        # ordered_products.append(ordered_product)
+        ordered_bys.append(ordered_by)
+        # print(ordered_products)
+        delivery=order.deliveryman
+        if delivery is None:
+            delivery = DeliveryMan()
+            delivery.username = "Not accepted"
+        order.deliveryman = delivery
+        user = User.objects.all().filter(id=order.deliveryman.user_key)
+        for i in user:
+            delivery.username = i.username
+        print()
     mydict = {
         'customercount': customercount,
         'productcount': productcount,
         'ordercount': ordercount,
         'data': zip(ordered_products, ordered_bys, orders),
     }
+    # print(ordered_products)
     return render(request, 'admin_dashboard.html', context=mydict)
 
+
+@login_required(login_url='adminlogin')
+def view_deliveryman(request):
+   deliverymen = DeliveryMan.objects.all()
+   return render(request,'view_deliveryman.html',{'deliverymen':deliverymen})
+
+@login_required(login_url='adminlogin')
+def add_deliveryman(request,pk):
+    d = DeliveryMan.objects.all().filter(id=pk)
+    for i in d:
+        i.status = "accepted"
+        i.save()
+
+    return redirect('view-deliveryman')
+@login_required(login_url='adminlogin')
+def remove_deliveryman(request,pk):
+    d = DeliveryMan.objects.all().filter(id=pk)
+    for i in d:
+        i.status = "rejected"
+        i.save()
+    return redirect('view-deliveryman')
 
 # admin view customer table
 @login_required(login_url='adminlogin')
@@ -116,6 +156,8 @@ def admin_add_product_view(request):
         return HttpResponseRedirect('admin-products')
     return render(request, 'admin_add_products.html', {'productForm': productForm})
 
+from store.models import Category
+
 @login_required(login_url='adminlogin')
 def add_writer(request):
     writeForm = forms.WriterFrom()
@@ -125,6 +167,35 @@ def add_writer(request):
             writeForm.save()
         return HttpResponseRedirect('admin-products')
     return render(request, 'admin_add_writer.html', {'writeForm': writeForm})
+
+from store.forms import CategoryForm
+from store.models import Category
+@login_required(login_url='adminlogin')
+def add_category(request):
+    catForm = CategoryForm
+    if request.method == "POST":
+        catForm = CategoryForm(request.POST,request.FILES)
+        if catForm.is_valid():
+            catForm.save()
+            print("form saved,,,")
+        return redirect('view_all_cat')
+    return render(request,'add_category.html',{'catForm':catForm})
+
+
+def delete_category(request,pk):
+    cat = Category.objects.get(id=pk)
+    cat.delete()
+    return redirect('view_all_cat')
+
+    pass
+
+@login_required(login_url='adminlogin')
+def view_all_cat(request):
+    cats = Category.objects.all()
+    return render(request,"view_all_cat.html",{'data':cats})
+    pass
+
+
 
 @login_required(login_url='adminlogin')
 def delete_product_view(request, pk):
@@ -156,6 +227,7 @@ def admin_view_booking_view(request):
         ordered_products.append(ordered_product)
         ordered_bys.append(ordered_by)
     return render(request, 'admin_view_booking.html', {'data': zip(ordered_products, ordered_bys, orders)})
+
 
 @login_required(login_url='adminlogin')
 def view_writer(request):

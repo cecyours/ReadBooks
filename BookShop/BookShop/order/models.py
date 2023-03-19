@@ -3,7 +3,7 @@ from store.models import Book
 import datetime
 from django.contrib.auth.models import User
 
-
+from deliveryapp.models import DeliveryMan
 class Order(models.Model):
 	customer = models.ForeignKey(User, on_delete = models.CASCADE)
 	name = models.CharField(max_length=30)
@@ -18,6 +18,8 @@ class Order(models.Model):
 	transaction_id = models.CharField(max_length = 20)
 	payable = models.IntegerField()
 	totalbook = models.IntegerField()
+	status = models.CharField(max_length=20,null=True)
+	deliveryman = models.ForeignKey(DeliveryMan,on_delete=models.CASCADE,null=True,default=None)
 	# print(models.DateTimeField(auto_now_add=True),type(models.DateTimeField(auto_now_add=True)	))
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)

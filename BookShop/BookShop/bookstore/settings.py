@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'search.apps.SearchConfig',
     'order.apps.OrderConfig',
+    'deliveryapp.apps.DeliveryappConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     'myadmin',
     'widget_tweaks',
+    'django.contrib.humanize',
 
 
 

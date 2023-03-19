@@ -19,6 +19,8 @@
           <th>Customer</th>
           <th>Contact</th>
           <th>Shipment Address</th>
+          <th>status</th>
+          <th>delivery man</th>
           <th>Product</th>
           <th>Image</th>
 
@@ -30,6 +32,8 @@
         <td> {{c.username}}</td>
         <td>{{order.phone}}</td>
         <td>{{order.address}}</td>
+        <td>{{order.status}}</td>
+        <td>{{order.deliveryman.username}}</td>
 
         {% endfor %}
         {% for p in product %}
@@ -49,14 +53,8 @@
       </tr>
       {% endfor %}
 
-
-
-
-
     </table>
 
   </div>
-</div>
-
-
+</div> 
 {% endblock content %}
